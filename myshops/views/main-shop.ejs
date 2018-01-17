@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<title>ECSHOP 管理中心 - 商品列表 </title>
+		<meta name="robots" content="noindex, nofollow">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel='stylesheet' href='/stylesheets/style_green.css' />
+		<script src="/javascripts/jquery-1.11.3.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<h1>
+<span class="action-span"><a href="goods.php?act=add">添加新商品</a></span>
+<span class="action-span1"><a href="index.php?act=main">ECSHOP 管理中心</a> </span><span id="search_id" class="action-span1"> - 商品列表 </span>
+
+<span class="help_sub"><a target="_blank" title="商品列表帮助文档" href="http://help.ecmoban.com/article-1788.html"><img src="/admin-index-imgs/jnsy.png"></a></span>
+
+<div style="clear:both"></div>
+</h1>
+
+		<div class="form-div">
+			<form action="javascript:searchGoods()" name="searchForm">
+				<img src="" width="26" height="22" border="0" alt="SEARCH" />
+				<!-- 分类 -->
+
+				<!-- 品牌 -->
+				<select name="brand_id">
+					<option value="0">所有品牌</option>
+					<option value="43">帮宝适</option>
+					<option value="31">EVENY</option>
+					<option value="30">圣迪奥</option>
+					<option value="29">韩都衣舍</option>
+					<option value="28">betu百图</option>
+					<option value="27">艾夫斯</option>
+					<option value="26">太平鸟</option>
+					<option value="25">O.SA</option>
+					<option value="24">裂帛</option>
+					<option value="32">溢彩年华</option>
+					<option value="33">空间大师</option>
+					<option value="34">美好家</option>
+					<option value="42">贝亲</option>
+					<option value="41">雅培</option>
+					<option value="40">好事达</option>
+					<option value="39">千弘</option>
+					<option value="38">美亿佳</option>
+					<option value="37">大豪</option>
+					<option value="36">宝优妮</option>
+					<option value="35">生活诚品</option>
+					<option value="23">JNBY 江南布衣</option>
+					<option value="22">LILY</option>
+					<option value="9">联想</option>
+					<option value="8">惠普</option>
+					<option value="7">美的</option>
+					<option value="6">天翼</option>
+					<option value="5">漫步者</option>
+					<option value="4">希捷</option>
+					<option value="3">方正</option>
+					<option value="2">APPLE</option>
+					<option value="10">金立</option>
+					<option value="11"> 恒基伟业</option>
+					<option value="12">夏普</option>
+					<option value="21">白领</option>
+					<option value="19">acer</option>
+					<option value="18">AMD</option>
+					<option value="17">爱普生</option>
+					<option value="20">茵佳妮</option>
+					<option value="15">乐华</option>
+					<option value="14">创维</option>
+					<option value="13">索尼</option>
+					<option value="1">有讯网络</option>
+				</select>
+				<!-- 推荐 -->
+				<select name="intro_type">
+					<option value="0">全部</option>
+					<option value="is_best">精品</option>
+					<option value="is_new">新品</option>
+					<option value="is_hot">热销</option>
+					<option value="is_promote">特价</option>
+					<option value="all_type">全部推荐</option>
+				</select>
+				<!-- 上架 -->
+				<select name="is_on_sale">
+					<option value=''>全部</option>
+					<option value="1">上架</option>
+					<option value="0">下架</option>
+				</select>
+				<!-- 关键字 -->
+				关键字
+				<input type="text" name="keyword" size="15" />
+				<input type="submit" value=" 搜索 " class="button" />
+			</form>
+		</div>
+
+		<!-- 商品列表 -->
+		<form method="post" action="" name="listForm" >
+			<div class="list-div" id="listDiv">
+				<table cellpadding="3" cellspacing="1" class="table_goods">
+					<tr>
+						<th>
+							<input type="checkbox" />
+							<a href="#">编号</a><img src="/admin-index-imgs/dd.png" /> </th>
+						<th><a href="# ">商品名称</a></th>
+						<th><a href="#">货号</a></th>
+						<th><a href="#">价格</a></th>
+						<th><a href="#">上架</a></th>
+						<th><a href="#">精品</a></th>
+						<th><a href="#">新品</a></th>
+						<th><a href="#">热销</a></th>
+						<th><a href="#">推荐排序</a></th>
+						<th><a href="#">库存</a></th>
+						<th><a href="#">虚拟销量</a></th>
+						<th>操作</th>
+					</tr>
+						
+				</table>
+		</form>
+				<!-- 分页 -->
+				<table id="page-table" cellspacing="0">
+					<tr>
+						<td align="right" nowrap="true">
+							<div id="turn-page">
+								总计 <span id="totalRecords">7</span> 个记录分为 <span id="totalPages">1</span> 页当前第 <span id="pageCurrent">1</span> 页，每页
+								<input type='text' size='3' id='pageSize' value="10" />
+					<span id="page-link">
+			          <a href="#">第一页</a>
+			          <a href="#">上一页</a>
+			          <a href="#">下一页</a>
+			          <a href="#">最末页</a>
+          <select id="gotoPage">
+            <option value='1'>1</option>          </select>
+        </span>
+							</div>
+						</td>
+					</tr>
+				</table>
+
+			</div>
+
+			<div>
+				<input type="hidden" name="act" value="batch" />
+				<select name="type" id="selAction" onchange="changeAction()">
+					<option value="">请选择...</option>
+					<option value="trash">回收站</option>
+					<option value="on_sale">上架</option>
+					<option value="not_on_sale">下架</option>
+					<option value="best">精品</option>
+					<option value="not_best">取消精品</option>
+					<option value="new">新品</option>
+					<option value="not_new">取消新品</option>
+					<option value="hot">热销</option>
+					<option value="not_hot">取消热销</option>
+					<option value="move_to">转移到分类</option>
+
+				</select>
+				<input type="button" name="" id="" value="确定" class="button" />
+<input type="checkbox" name="" id="ad" value="" />
+	</body>
+
+	
+	<script type="text/javascript">
+		var index = 1;
+		var oTotalRecords = document.getElementById("totalRecords")
+		$(function(){
+				$.ajax({
+				type:"get",
+				url:"/updatagoods",
+				async:true,
+				success:function(res){
+					console.log(res)
+					var resLength = res.length;
+					for(let i=0;i<resLength;i++){
+						var goodname = res[i].goodname
+						var	cargo =  res[i].cargo
+						var	brand = res[i].brand
+						var	myprice =  res[i].myprice
+						var	waiprice =  res[i].waiprice
+						var	goodsimg =  res[i].goodsimg
+						var	inventory =  res[i].inventory
+						var	sales =  res[i].sales
+						var oBr = `<tr>
+										<td>
+											<input type="checkbox" name="checkboxes[]" value="136" />${index++}</td>
+										<td class="first-cell" style="color:red;"><span>${goodname}</span></td>
+										<td align="center"><span >${cargo}</span></td>
+										<td align="center"><span >${myprice}
+										</span></td>
+										<td align="center"><img src="/admin-index-imgs/yes.gif" /></td>
+										<td align="center"><img src="/admin-index-imgs/yes.gif" /></td>
+										<td align="center"><img src="/admin-index-imgs/yes.gif"  /></td>
+										<td align="center"><img src="/admin-index-imgs/yes.gif"  /></td>
+										<td align="center"><span >2</span></td>
+										<td align="center"><span >${inventory}</span></td>
+										<td align="center"><span>${sales}</span></td>
+										<td align="center">
+											<a href="#" target="_blank" title="查看"><img src="/admin-index-imgs/icon_view.gif" width="21" height="21" border="0" /></a>
+											<a href="#" title="编辑" class= "updateGoods"><img src="/admin-index-imgs/icon_edit.gif" width="21" height="21" border="0" /></a>
+											<a href="#" title="复制"><img src="/admin-index-imgs/icon_copy.gif" width="21" height="21" border="0" /></a>
+											<a href="javascript:;" title="回收站" class="removeGoods"><img src="/admin-index-imgs/icon_trash.gif" width="21" height="21" border="0" /></a>
+											<img src="/admin-index-imgs/empty.gif" width="21" height="21" border="0" /> </td>
+									</tr>`
+				
+  		$(oBr).appendTo($(".table_goods"));
+					}
+					oTotalRecords.innerHTML = index-1;	
+				}
+			});
+				
+		})
+//	oTable_goods[p].firstElementChild.firstElementChild.nextElementSibling.firstElementChild.innerHTML
+	//
+//			var oTable_goods = document.getElementsByClassName("table_goods")[0]	
+//			var oTable_goodsChild = oTable_goods.children[0].children
+//			console.log(oTable_goodsChildLength[0])
+//			for(var p = 1;p<888;p++){
+//				var Aremovegoods = oTable_goodsChild[p].lastElementChild.lastElementChild.previousElementSibling
+//				console.log(Aremovegoods)
+//				console.log(Aremovegoods)
+//				console.log(123)
+//			
+//			}
+			 setTimeout(function(){
+				var Remove = document.getElementsByClassName("removeGoods")
+				var Update = document.getElementsByClassName("updateGoods")
+				console.log(Remove.length)
+				for(var q = 0;q<Remove.length;q++){
+					console.log(Remove[q])
+					Remove[q].onclick = function(){
+						var thisName = this.parentNode.parentNode.firstElementChild.nextElementSibling.firstElementChild.innerHTML
+						var thisname = this.parentNode.parentNode.parentNode
+						var that = this
+						console.log(thisname)
+						$.ajax({
+							type: "post",
+							url: "/removegoods",
+							data: {
+								goodId: thisName,
+							},
+							success: function(res) {
+								alert(res.message)
+								if(res.code == -444){
+									thisname.removeChild(that.parentNode.parentNode)
+								}
+							}
+						});
+					}
+//					
+//					
+//					Update[q].onclick = function(){
+//						var thisName = this.parentNode.parentNode.firstElementChild.nextElementSibling.firstElementChild.innerHTML
+//						var thisname = this.parentNode.parentNode.parentNode
+//						var that = this
+//						console.log(thisname)
+//						$.ajax({
+//							type: "get",
+//							url: "/updatagoods-index",
+//							data: {
+//								goodId: thisName,
+//							},
+//							success: function(res) {
+//							}
+//						});
+//					}
+//					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+				}
+			},500)
+			
+
+	
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</script>
+
+</html>

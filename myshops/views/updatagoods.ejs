@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>ECSHOP 管理中心 - 编辑新商品 </title>
+		<meta name="robots" content="noindex, nofollow">
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<link rel='stylesheet' href='/stylesheets/style_green.css' />
+		<link rel='stylesheet' href='/stylesheets/main.css' />
+		<script src="/javascripts/jquery-1.11.3.js" type="text/javascript" charset="utf-8"></script>
+	</head>	
+	<body>	
+		<div class="tab-div">
+			<div id="tabbody-div">
+				<form enctype="multipart/form-data" action="" method="post" name="theForm">
+					<input name="MAX_FILE_SIZE" value="2097152" type="hidden">
+					<table id="general-table" class="goods_info" width="90%" align="center">
+						<tbody>
+							<tr>
+								<td class="label">商品名称：</td>
+								<td>
+									<input name="goods_name" style="float:left;color:;" size="30" type="text" class="goods_name">
+									<select name="goods_name_style">
+										<option value="" selected="selected">字体样式</option>
+										<option value="strong">加粗</option>
+										<option value="em">斜体</option>
+										<option value="u">下划线</option>
+										<option value="strike">删除线</option>
+									</select>
+									<span class="require-field">*</span></td>
+							</tr>
+							<tr>
+								<td class="label">
+									<a href="javascript:showNotice('noticeGoodsSN');" title="点击此处查看提示信息"><img src="/admin-index-imgs/notice.gif" alt="点击此处查看提示信息" width="16" border="0" height="16"></a> 商品货号： </td>
+								<td>
+									<input name="goods_sn" size="20"type="text" class="goods_sn"><span id="goods_sn_notice"></span>
+									<br>
+									<span class="notice-span" style="display:block" id="noticeGoodsSN">如果您不输入商品货号，系统将自动生成一个唯一的货号。</span></td>
+							</tr>
+
+							<tr>
+								<td class="label">扩展分类：</td>
+								<td>
+									<input value="添加"class="button" type="button">
+								</td>
+							</tr>
+							<tr>
+								<td class="label">商品品牌：</td>
+								<td>
+									<select name="brand_id" class="brand_id">
+										<option value="0" selected="selected">请选择...</option>
+										<option value="44">kk</option>
+										<option value="32">溢彩年华</option>
+										<option value="31">EVENY</option>
+										<option value="30">圣迪奥</option>
+										<option value="29">韩都衣舍</option>
+										<option value="28">betu百图</option>
+										<option value="27">艾夫斯</option>
+										<option value="26">太平鸟</option>
+										<option value="25">O.SA</option>
+										<option value="33">空间大师</option>
+										<option value="34">美好家</option>
+										<option value="35">生活诚品</option>
+										<option value="43">帮宝适</option>
+										<option value="42">贝亲</option>
+										<option value="41">雅培</option>
+										<option value="40">好事达</option>
+										<option value="39">千弘</option>
+										<option value="38">美亿佳</option>
+										<option value="37">大豪</option>
+										<option value="36">宝优妮</option>
+										<option value="24">裂帛</option>
+										<option value="23">JNBY 江南布衣</option>
+										<option value="22">LILY</option>
+										<option value="9">联想</option>
+										<option value="8">惠普</option>
+										<option value="7">美的</option>
+										<option value="6">天翼</option>
+										<option value="5">漫步者</option>
+										<option value="4">希捷</option>
+										<option value="3">方正</option>
+										<option value="2">APPLE</option>
+										<option value="10">金立</option>
+										<option value="11"> 恒基伟业</option>
+										<option value="12">夏普</option>
+										<option value="21">白领</option>
+										<option value="19">acer</option>
+										<option value="18">AMD</option>
+										<option value="17">爱普生</option>
+										<option value="20">茵佳妮</option>
+										<option value="15">乐华</option>
+										<option value="14">创维</option>
+										<option value="13">索尼</option>
+										<option value="1">有讯网络</option>
+									</select>
+									<a href="javascript:void(0)" title="添加品牌" onclick="rapidBrandAdd()" class="special">添加品牌</a>
+									<span id="brand_add" style="display:none;">
+              <input class="text" size="15" name="addedBrandName">
+               <a href="javascript:void(0)" onclick="addBrand()" class="special"> 确定 </a>
+               <a href="javascript:void(0)" onclick="return goBrandPage()" title="品牌管理" class="special">品牌管理</a>
+               <a href="javascript:void(0)" onclick="hideBrandDiv()" title="隐藏" class="special">&lt;&lt;</a>
+               </span>
+								</td>
+							</tr>
+							<tr>
+								<td class="label">本店售价：</td>
+								<td>
+									<input name="shop_price" value="0" size="20" onblur="priceSetted()" type="text" class="shop_price">
+									<input value="按市场价计算" onclick="marketPriceSetted()" type="button">
+									<span class="require-field">*</span></td>
+							</tr>
+
+							<tr>
+								<td class="label">
+									<a href="javascript:showNotice('volumePrice');" title="点击此处查看提示信息"><img src="/admin-index-imgs/notice.gif" alt="点击此处查看提示信息" width="16" border="0" height="16"></a>商品优惠价格：</td>
+								<td>
+									<table id="tbody-volume" width="100%" align="center">
+										<tbody>
+											<tr>
+												<td>
+													<a href="javascript:;">[+]</a> 优惠数量
+													<input name="volume_number[]" size="8" class="input02" type="text"> 优惠价格
+													<input name="volume_price[]" size="8" class="input02" type="text">
+												</td>
+											</tr>
+										</tbody>
+									</table>
+									<span class="notice-span" style="display:block" id="volumePrice">购买数量达到优惠数量时享受的优惠价格</span>
+								</td>
+							</tr>
+
+							<tr>
+								<td class="label">市场售价：</td>
+								<td>
+									<input name="market_price" value="0" size="20" type="text" class="market_price">
+									<input value="取整数"type="button">
+								</td>
+							</tr>
+							<tr>
+								<td class="label">虚拟销量：</td>
+								<td>
+									<input name="virtual_sales" value="0" size="20" type="text" class="virtual_sales">
+								</td>
+							</tr>
+							<tr>
+								<td class="label">
+									<a href="javascript:showNotice('giveIntegral');" title="点击此处查看提示信息"><img src="/admin-index-imgs/notice.gif" alt="点击此处查看提示信息" width="16" border="0" height="16"></a> 赠送消费积分数：</td>
+								<td>
+									<input name="give_integral" value="-1" size="20" type="text">
+									<br><span class="notice-span" style="display:block" id="giveIntegral">购买该商品时赠送消费积分数,-1表示按商品价格赠送</span></td>
+							</tr>
+							<tr>
+								<td class="label">
+									<a href="javascript:showNotice('rankIntegral');" title="点击此处查看提示信息"><img src="/admin-index-imgs/notice.gif" alt="点击此处查看提示信息" width="16" border="0" height="16"></a> 赠送等级积分数：</td>
+								<td>
+									<input name="rank_integral" value="-1" size="20" type="text">
+									<br><span class="notice-span" style="display:block" id="rankIntegral">购买该商品时赠送等级积分数,-1表示按商品价格赠送</span></td>
+							</tr>
+							<tr>
+								<td class="label">
+									<a href="javascript:showNotice('noticPoints');" title="点击此处查看提示信息"><img src="/admin-index-imgs/notice.gif" alt="点击此处查看提示信息" width="16" border="0" height="16"></a> 积分购买金额：</td>
+								<td>
+									<input name="integral" value="0" size="20" type="text">
+									<br><span class="notice-span" style="display:block" id="noticPoints">(此处需填写金额)购买该商品时最多可以使用积分的金额</span>
+								</td>
+							</tr>
+							<tr>
+								<td class="label">
+									<label for="is_promote">
+										<input id="is_promote" name="is_promote" value="1"  type="checkbox"> 促销价：</label>
+								</td>
+								<td id="promote_3">
+									<input id="promote_1" name="promote_price" value="0" size="20" disabled="disabled" type="text">
+								</td>
+							</tr>
+							<tr id="promote_4">
+								<td class="label" id="promote_5">促销日期：</td>
+								<td id="promote_6">
+									<input name="promote_start_date" id="promote_start_date" size="12" value="2018-01-16" readonly="readonly" type="text">
+									<input name="selbtn1" id="selbtn1" value="选择" class="button" disabled="disabled" type="button"> -
+									<input name="promote_end_date" id="promote_end_date" size="12" value="2018-02-15" readonly="readonly" type="text">
+									<input name="selbtn2" id="selbtn2" value="选择" class="button" disabled="disabled" type="button">
+								</td>
+							</tr>
+							<tr>
+								<td class="label">上传商品图片：</td>
+								<td>
+									<input name="goods_img" size="35" type="file" class="goods_img">
+
+									<br>
+									<input size="40" value="商品图片外部URL" style="color:#aaa;"name="goods_img_url" type="text">
+								</td>
+							</tr>
+							<tr id="auto_thumb_1">
+								<td class="label"> 上传商品缩略图：</td>
+								<td id="auto_thumb_3">
+									<input name="goods_thumb" size="35" disabled="disabled" type="file">
+
+									<br>
+									<input size="40" value="商品缩略图外部URL" style="color:#aaa;"name="goods_thumb_url" disabled="disabled" type="text">
+									<br>
+									<label for="auto_thumb">
+										<input id="auto_thumb" name="auto_thumb" checked="checked" value="1" type="checkbox">自动生成商品缩略图</label>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+
+					<table id="detail-table" style="display:none" width="90%">
+					</table>
+
+					<table id="gallery-table" style="display:none" width="90%" align="center">
+						<tbody>
+							<tr>
+								<td>
+								</td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="javascript:;">[+]</a> 图片描述
+									<input name="img_desc[]" size="20" type="text"> 上传文件
+									<input name="img_url" type="file" class="img_url">
+									<input size="40" value="或者输入外部图片链接地址" style="color:#aaa;"name="img_file[]" type="text">
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<table id="linkgoods-table" style="display:none" width="90%" align="center">
+						<tbody>
+							<tr>
+								<td colspan="3">
+									<select name="brand_id1">
+										<option value="0" selected="selected">所有品牌</option>
+										<option value="44">kk</option>
+										<option value="32">溢彩年华</option>
+										<option value="31">EVENY</option>
+										<option value="30">圣迪奥</option>
+										<option value="29">韩都衣舍</option>
+										<option value="28">betu百图</option>
+										<option value="27">艾夫斯</option>
+										<option value="26">太平鸟</option>
+										<option value="25">O.SA</option>
+										<option value="33">空间大师</option>
+										<option value="34">美好家</option>
+										<option value="35">生活诚品</option>
+										<option value="43">帮宝适</option>
+										<option value="42">贝亲</option>
+										<option value="41">雅培</option>
+										<option value="40">好事达</option>
+										<option value="39">千弘</option>
+										<option value="38">美亿佳</option>
+										<option value="37">大豪</option>
+										<option value="36">宝优妮</option>
+										<option value="24">裂帛</option>
+										<option value="23">JNBY 江南布衣</option>
+										<option value="22">LILY</option>
+										<option value="9">联想</option>
+										<option value="8">惠普</option>
+										<option value="7">美的</option>
+										<option value="6">天翼</option>
+										<option value="5">漫步者</option>
+										<option value="4">希捷</option>
+										<option value="3">方正</option>
+										<option value="2">APPLE</option>
+										<option value="10">金立</option>
+										<option value="11"> 恒基伟业</option>
+										<option value="12">夏普</option>
+										<option value="21">白领</option>
+										<option value="19">acer</option>
+										<option value="18">AMD</option>
+										<option value="17">爱普生</option>
+										<option value="20">茵佳妮</option>
+										<option value="15">乐华</option>
+										<option value="14">创维</option>
+										<option value="13">索尼</option>
+										<option value="1">有讯网络</option>
+									</select>
+									<input name="keyword1" type="text">
+									<input value=" 搜索 " class="button" type="button">
+								</td>
+							</tr>
+							
+							<tr>
+								<td width="42%">
+									<select name="source_select1" size="20" style="width:100%"multiple="true">
+									</select>
+								</td>
+								<td align="center">
+									<p>
+										<input name="is_single" value="1" checked="checked" type="radio">单向关联
+										<br>
+										<input name="is_single" value="0" type="radio">双向关联</p>
+									<p>
+										<input value="&gt;&gt;"  class="button" type="button">
+									</p>
+									<p>
+										<input value="&gt;" class="button" type="button">
+									</p>
+									<p>
+										<input value="&lt;" class="button" type="button">
+									</p>
+									<p>
+										<input value="&lt;&lt;" class="button" type="button">
+									</p>
+								</td>
+								<td width="42%">
+									<select name="target_select1" size="20" style="width:100%" multiple="multiple ">
+									</select>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+
+					<table id="groupgoods-table" style="display:none" width="90%" align="center">
+						<tbody>
+							<tr>
+								<td width="42%">
+									<select name="source_select2" size="20" style="width:100%">
+									</select>
+								</td>
+								<td align="center">
+									<p>价格
+										<br>
+										<input name="price2" size="6" type="text">
+									</p>
+									<p>
+										<input value="&gt;"class="button" type="button">
+									</p>
+									<p>
+										<input value="&lt;" class="button" type="button">
+									</p>
+									<p>
+										<input value="&lt;&lt;"  class="button" type="button">
+									</p>
+								</td>
+								<td width="42%">
+									<select name="target_select2" size="20" style="width:100%" multiple="multiple">
+									</select>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+
+					<table id="article-table" style="display:none" width="90%" align="center">
+						<tbody>
+						
+							<tr>
+								<td width="45%">
+									<select name="source_select3" size="20" style="width:100%" multiple="multiple">
+									</select>
+								</td>
+								<td align="center">
+									<p>
+										<input value="&gt;&gt;"class="button" type="button">
+									</p>
+									<p>
+										<input value="&gt;"class="button" type="button">
+									</p>
+									<p>
+										<input value="&lt;"class="button" type="button">
+									</p>
+									<p>
+										<input value="&lt;&lt;" class="button" type="button">
+									</p>
+								</td>
+								<td width="45%">
+									<select name="target_select3" size="20" style="width:100%" multiple="multiple" >
+									</select>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+
+					<div class="button-div">
+						<input name="goods_id" value="0" type="hidden">
+						<input value=" 确定 " class="button_date" type="button">
+						<input value=" 重置 " class="button_reset" type="reset">
+					</div>
+					<input name="act" value="insert" type="hidden">
+				</form>
+			</div>
+		</div>
+
+		</body>
+	
+	<script type="text/javascript">
+		var oButtonreset = document.getElementsByClassName("button_reset")[0]
+		var oButtondata =document.getElementsByClassName("button_date")[0]
+		oButtondata.onclick = function(){
+			var form = new FormData();
+			form.append("goodname",document.getElementsByClassName("goods_name")[0].value)
+			form.append("cargo",document.getElementsByClassName("goods_sn")[0].value)
+			form.append("brand",document.getElementsByClassName("brand_id")[0].value)
+			form.append("myprice",document.getElementsByClassName("shop_price")[0].value)
+			form.append("waiprice",document.getElementsByClassName("market_price")[0].value)
+			form.append("goodsimg",document.getElementsByClassName("goods_img")[0].files[0])
+			form.append("inventory","99")
+			form.append("sales",document.getElementsByClassName("virtual_sales")[0].value)
+			var xhr = new XMLHttpRequest;
+			xhr.open("POST","/api/addgoodsAction")
+			xhr.send(form)
+			xhr.onreadystatechange = function(){
+				if(xhr.readyState ==4 && xhr.status==200 ){
+					var res = JSON.parse(xhr.responseText)
+					alert(res.message)
+				}
+			}
+		}
+	</script>
+	
+	
+	
+	
+	
+	
+</html>
