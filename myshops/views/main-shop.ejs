@@ -87,7 +87,7 @@
 				</select>
 				<!-- 关键字 -->
 				关键字
-				<input type="text" name="keyword" size="15" />
+				<input type="text" name="keyword" size="15" class="keyword"/>
 				<input type="submit" value=" 搜索 " class="button" />
 			</form>
 		</div>
@@ -96,7 +96,7 @@
 		<form method="post" action="" name="listForm" >
 			<div class="list-div" id="listDiv">
 				<table cellpadding="3" cellspacing="1" class="table_goods">
-					<tr>
+					<tr class="goodstr">
 						<th>
 							<input type="checkbox" />
 							<a href="#">编号</a><img src="/admin-index-imgs/dd.png" /> </th>
@@ -120,23 +120,22 @@
 					<tr>
 						<td align="right" nowrap="true">
 							<div id="turn-page">
-								总计 <span id="totalRecords">7</span> 个记录分为 <span id="totalPages">1</span> 页当前第 <span id="pageCurrent">1</span> 页，每页
-								<input type='text' size='3' id='pageSize' value="10" />
-					<span id="page-link">
-			          <a href="#">第一页</a>
-			          <a href="#">上一页</a>
-			          <a href="#">下一页</a>
-			          <a href="#">最末页</a>
-          <select id="gotoPage">
-            <option value='1'>1</option>          </select>
-        </span>
+								总计 <span id="totalRecords">7</span> 个记录分为 <span id="totalPages">1</span> 页当前第 <span id="pageCurrent"></span> 页，每页
+								<input type='text' size='3' id='pageSize' value="5" />
+								<span id="page-link">
+						          <a href="#">第一页</a>
+						          <a href="#" id="uppage">上一页</a>
+						          <a href="#" id= "downpage">下一页</a>
+						          <a href="#">最末页</a>
+						          <select id="gotoPage">
+						            <option value='1'>1</option>          
+						          </select>
+			       				</span>
 							</div>
 						</td>
 					</tr>
 				</table>
-
 			</div>
-
 			<div>
 				<input type="hidden" name="act" value="batch" />
 				<select name="type" id="selAction" onchange="changeAction()">
@@ -156,18 +155,21 @@
 				<input type="button" name="" id="" value="确定" class="button" />
 <input type="checkbox" name="" id="ad" value="" />
 	</body>
-
-	
 	<script type="text/javascript">
-		var index = 1;
-		var oTotalRecords = document.getElementById("totalRecords")
-		$(function(){
-				$.ajax({
+		var oButton = document.getElementsByClassName("button")[0]
+		var oKeyword = document.getElementsByClassName("keyword")[0]
+		oButton.onclick = function(){
+			$(".goodstr").nextAll().remove();
+			var obtnvalue = oKeyword.value
+			$.ajax({
 				type:"get",
-				url:"/updatagoods",
+				url:"/list",
 				async:true,
+				data:{
+					condition:obtnvalue
+				},
 				success:function(res){
-					console.log(res)
+					res = res.data
 					var resLength = res.length;
 					for(let i=0;i<resLength;i++){
 						var goodname = res[i].goodname
@@ -202,7 +204,66 @@
 				
   		$(oBr).appendTo($(".table_goods"));
 					}
-					oTotalRecords.innerHTML = index-1;	
+				}
+			});
+		}
+	</script>
+	<script type="text/javascript">
+		var index = 1;
+		var indexPage = 1;
+		var pageIndex = 0;
+		var oTotalRecords = document.getElementById("totalRecords")
+		var oTotalRecords = document.getElementById("totalRecords")
+		var oTotalPages = document.getElementById("totalPages")
+		var oPageCurrent = document.getElementById("pageCurrent")
+		$(function(){
+				$.ajax({
+				type:"get",
+				url:"/updatagoods",
+				async:true,
+				adta:{
+					pageIndex :pageIndex
+				},
+				success:function(res){
+//					console.log(res)
+					res_index = parseInt(res.pageindex)
+					oTotalRecords.innerHTML = res_index
+					oTotalPages.innerHTML = Math.ceil(res_index/5)
+					res = res.items
+					var resLength = res.length;
+					for(let i=0;i<resLength;i++){
+						var goodname = res[i].goodname
+						var	cargo =  res[i].cargo
+						var	brand = res[i].brand
+						var	myprice =  res[i].myprice
+						var	waiprice =  res[i].waiprice
+						var	goodsimg =  res[i].goodsimg
+						var	inventory =  res[i].inventory
+						var	sales =  res[i].sales
+						var oBr = `<tr>
+										<td>
+											<input type="checkbox" name="checkboxes[]" value="136" />${index++}</td>
+										<td class="first-cell" style="color:red;"><span>${goodname}</span></td>
+										<td align="center"><span >${cargo}</span></td>
+										<td align="center"><span >${myprice}
+										</span></td>
+										<td align="center"><img src="/admin-index-imgs/yes.gif" /></td>
+										<td align="center"><img src="/admin-index-imgs/yes.gif" /></td>
+										<td align="center"><img src="/admin-index-imgs/yes.gif"  /></td>
+										<td align="center"><img src="/admin-index-imgs/yes.gif"  /></td>
+										<td align="center"><span >2</span></td>
+										<td align="center"><span >${inventory}</span></td>
+										<td align="center"><span>${sales}</span></td>
+										<td align="center">
+											<a href="#" target="_blank" title="查看"><img src="/admin-index-imgs/icon_view.gif" width="21" height="21" border="0" /></a>
+											<a href="#" title="编辑" class= "updateGoods"><img src="/admin-index-imgs/icon_edit.gif" width="21" height="21" border="0" /></a>
+											<a href="#" title="复制"><img src="/admin-index-imgs/icon_copy.gif" width="21" height="21" border="0" /></a>
+											<a href="javascript:;" title="回收站" class="removeGoods"><img src="/admin-index-imgs/icon_trash.gif" width="21" height="21" border="0" /></a>
+											<img src="/admin-index-imgs/empty.gif" width="21" height="21" border="0" /> </td>
+									</tr>`
+				
+  		$(oBr).appendTo($(".table_goods"));
+					}
 				}
 			});
 				
@@ -222,6 +283,7 @@
 			 setTimeout(function(){
 				var Remove = document.getElementsByClassName("removeGoods")
 				var Update = document.getElementsByClassName("updateGoods")
+				oPageCurrent.innerHTML = indexPage
 				console.log(Remove.length)
 				for(var q = 0;q<Remove.length;q++){
 					console.log(Remove[q])
@@ -270,13 +332,184 @@
 					
 					
 					
-					
 				}
 			},500)
 			
 
-	
 
+
+
+
+
+
+
+
+				var oUppage = document.getElementById("uppage");
+				var oDownpage = document.getElementById("downpage");
+				var pageIndex = 0
+				oDownpage.onclick = function(){
+					if(indexPage >= Math.ceil(res_index/5)){
+						indexPage = Math.ceil(res_index/5)
+					}else{
+						pageIndex+=5
+						oPageCurrent.innerHTML = ++indexPage
+					}
+					$(".goodstr").nextAll().remove();
+					$.ajax({
+						type:"get",
+						url:"/updatagoods",
+						async:true,
+						data:{
+							pageIndex :pageIndex
+						},
+						success:function(res){
+//							alert(res.count)
+//							console.log(res)
+							res = res.items
+							var resLength = res.length;
+							for(let i=0;i<resLength;i++){
+								var goodname = res[i].goodname
+								var	cargo =  res[i].cargo
+								var	brand = res[i].brand
+								var	myprice =  res[i].myprice
+								var	waiprice =  res[i].waiprice
+								var	goodsimg =  res[i].goodsimg
+								var	inventory =  res[i].inventory
+								var	sales =  res[i].sales
+								var oBr = `<tr>
+												<td>
+													<input type="checkbox" name="checkboxes[]" value="136" />${index++}</td>
+												<td class="first-cell" style="color:red;"><span>${goodname}</span></td>
+												<td align="center"><span >${cargo}</span></td>
+												<td align="center"><span >${myprice}
+												</span></td>
+												<td align="center"><img src="/admin-index-imgs/yes.gif" /></td>
+												<td align="center"><img src="/admin-index-imgs/yes.gif" /></td>
+												<td align="center"><img src="/admin-index-imgs/yes.gif"  /></td>
+												<td align="center"><img src="/admin-index-imgs/yes.gif"  /></td>
+												<td align="center"><span >2</span></td>
+												<td align="center"><span >${inventory}</span></td>
+												<td align="center"><span>${sales}</span></td>
+												<td align="center">
+													<a href="#" target="_blank" title="查看"><img src="/admin-index-imgs/icon_view.gif" width="21" height="21" border="0" /></a>
+													<a href="#" title="编辑" class= "updateGoods"><img src="/admin-index-imgs/icon_edit.gif" width="21" height="21" border="0" /></a>
+													<a href="#" title="复制"><img src="/admin-index-imgs/icon_copy.gif" width="21" height="21" border="0" /></a>
+													<a href="javascript:;" title="回收站" class="removeGoods"><img src="/admin-index-imgs/icon_trash.gif" width="21" height="21" border="0" /></a>
+													<img src="/admin-index-imgs/empty.gif" width="21" height="21" border="0" /> </td>
+											</tr>`
+					
+		  		$(oBr).appendTo($(".table_goods"));
+							}
+							
+	setTimeout(function(){
+				var Remove = document.getElementsByClassName("removeGoods")
+				var Update = document.getElementsByClassName("updateGoods")
+				oPageCurrent.innerHTML = indexPage
+				console.log(Remove.length)
+				for(let q = 0;q<Remove.length;q++){
+					console.log(Remove[q])
+					Remove[q].onclick = function(){
+						var thisName = this.parentNode.parentNode.firstElementChild.nextElementSibling.firstElementChild.innerHTML
+						var thisname = this.parentNode.parentNode.parentNode
+						var that = this
+						console.log(thisname)
+						$.ajax({
+							type: "post",
+							url: "/removegoods",
+							data: {
+								goodId: thisName,
+							},
+							success: function(res) {
+								alert(res.message)
+								if(res.code == -444){
+									thisname.removeChild(that.parentNode.parentNode)
+								}
+							}
+						});
+					}
+					
+					
+					Update[q].onclick = function(){
+						alert(123)
+					}
+					
+					
+					
+					
+					
+					
+					
+					
+					
+				}
+			},500)
+							
+								}
+							});
+						}
+						
+				
+				
+				oUppage.onclick = function(){
+					if(indexPage <= 1){
+						indexPage = 1
+					}else{
+						pageIndex-=5
+						oPageCurrent.innerHTML = --indexPage
+					}
+					$(".goodstr").nextAll().remove();
+					$.ajax({
+						type:"get",
+						url:"/updatagoods",
+						async:true,
+						data:{
+							pageIndex :pageIndex
+						},
+						success:function(res){
+//							console.log(res)
+							res = res.items
+							var resLength = res.length;
+							for(let i=0;i<resLength;i++){
+								var goodname = res[i].goodname
+								var	cargo =  res[i].cargo
+								var	brand = res[i].brand
+								var	myprice =  res[i].myprice
+								var	waiprice =  res[i].waiprice
+								var	goodsimg =  res[i].goodsimg
+								var	inventory =  res[i].inventory
+								var	sales =  res[i].sales
+								var oBr = `<tr>
+												<td>
+													<input type="checkbox" name="checkboxes[]" value="136" />${index++}</td>
+												<td class="first-cell" style="color:red;"><span>${goodname}</span></td>
+												<td align="center"><span >${cargo}</span></td>
+												<td align="center"><span >${myprice}
+												</span></td>
+												<td align="center"><img src="/admin-index-imgs/yes.gif" /></td>
+												<td align="center"><img src="/admin-index-imgs/yes.gif" /></td>
+												<td align="center"><img src="/admin-index-imgs/yes.gif"  /></td>
+												<td align="center"><img src="/admin-index-imgs/yes.gif"  /></td>
+												<td align="center"><span >2</span></td>
+												<td align="center"><span >${inventory}</span></td>
+												<td align="center"><span>${sales}</span></td>
+												<td align="center">
+													<a href="#" target="_blank" title="查看"><img src="/admin-index-imgs/icon_view.gif" width="21" height="21" border="0" /></a>
+													<a href="#" title="编辑" class= "updateGoods"><img src="/admin-index-imgs/icon_edit.gif" width="21" height="21" border="0" /></a>
+													<a href="#" title="复制"><img src="/admin-index-imgs/icon_copy.gif" width="21" height="21" border="0" /></a>
+													<a href="javascript:;" title="回收站" class="removeGoods"><img src="/admin-index-imgs/icon_trash.gif" width="21" height="21" border="0" /></a>
+													<img src="/admin-index-imgs/empty.gif" width="21" height="21" border="0" /> </td>
+											</tr>`
+					
+		  		$(oBr).appendTo($(".table_goods"));
+							}
+							
+							
+							
+								}
+							});
+						}
+						
+			
 		
 		
 		

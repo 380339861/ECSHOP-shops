@@ -103,13 +103,23 @@ router.get('/updatagoods', function(req, res, next) {
 //		function (err, docs) {
 //			res.json(docs)
 //	});
-var query = GoodsModel.find({});
-query.count({},function(err, count) {
-	
-});
-query.skip(0).limit(5).exec('find', function(err, items) {
-	res.json(items)
-});
+		var pageIndex = parseInt(req.query.pageIndex);
+		console.log("第"+pageIndex+"页的几个数据")
+		var query = GoodsModel.find({});
+		query.count({},function(err, count){
+//			console.log(count)
+			query.skip(pageIndex).limit(5).exec('find', function(err, items) {
+				console.log(count)
+				var result = {
+					pageindex: count,
+					items: items,
+				}
+			res.json(result);
+//			console.log(items)
+			});
+			
+		});
+		
 });
 
 
@@ -119,7 +129,7 @@ router.post('/removegoods', function(req, res, next) {
 			code: 1,
 			message: "商品删除失败"
 		};
-	console.log(req.body.goodId)
+	console.log(req.body.p)
 		GoodsModel.remove({goodname:req.body.goodId}, function (err,docs) {
 			if(!err){
 				result.code = -444;
@@ -140,12 +150,6 @@ res.render('updatagoods', {});
 //			res.json(docs)
 //	});
 //});
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -187,11 +191,36 @@ res.render('updatagoods', {});
 //		});
 //});
 //
+//router.get('/uppage', function(req, res, next) {
+//		var pageIndex = req.query.pageIndex;
+//		var query = GoodsModel.find({});
+//query.count({},function(err, count) {
+//	
+//});
+//query.skip(pageIndex).limit(5).exec('find', function(err, items) {
+//	res.json(items)
+//});
+//});
 
 
 
 
+//模糊查
+router.get('/list', function(req, res, next) {
+	var condition = req.query.condition;
 
+	GoodsModel.count({goodname: {$regex: condition}}, function(err, count){
+		var query = GoodsModel.find({goodname: {$regex: condition}})
+		query.exec(function(err, docs){
+			console.log(err, docs);
+			var result = {
+				total: count,
+				data: docs,
+			}
+			res.json(result);
+		});
+	})
+});
 
 
 
