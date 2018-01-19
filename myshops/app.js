@@ -6,6 +6,10 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require("mongoose")
 
+var session = require("express-session");
+
+
+
 //连接数据库
 mongoose.connect('mongodb://localhost/shop');
 var index = require('./routes/index');
@@ -24,7 +28,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(express({
+  resave: true, // don't save session if unmodified  
+  saveUninitialized: false, // don't create session until something stored  
+  secret: 'h5_1723' 
+}))
 app.use('/', index);
 app.use('/users', users);
 

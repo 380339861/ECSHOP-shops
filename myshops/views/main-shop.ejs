@@ -308,22 +308,85 @@
 					}
 //					
 //					
-//					Update[q].onclick = function(){
-//						var thisName = this.parentNode.parentNode.firstElementChild.nextElementSibling.firstElementChild.innerHTML
-//						var thisname = this.parentNode.parentNode.parentNode
-//						var that = this
-//						console.log(thisname)
-//						$.ajax({
-//							type: "get",
-//							url: "/updatagoods-index",
-//							data: {
-//								goodId: thisName,
-//							},
-//							success: function(res) {
-//							}
-//						});
-//					}
-//					
+					Update[q].onclick = function(){
+						var thisName = this.parentNode.parentNode.firstElementChild.nextElementSibling.firstElementChild.innerHTML
+						var thisname = this.parentNode.parentNode.parentNode
+						var that = this
+						console.log(thisname)
+//						alert(123)
+//						window.opener.ab(h) ;
+						$.ajax({
+							type: "get",
+							url: "/updatagoods-index",
+							data: {
+								goodId: thisName,
+							},
+							success: function(res) {
+								$(".dabox-right").load("updatagoods-index")
+								setTimeout(function(){
+									var thatName = thisName
+									$.ajax({
+										type:"get",
+										url:"updata-addgoods",
+										async:true,
+										data: {
+											goodIdp: thatName,
+										},
+										success:function(res){
+											var goodname = res[0].goodname
+											var	cargo =  res[0].cargo
+											var	brand = res[0].brand
+											var	myprice =  res[0].myprice
+											var	waiprice =  res[0].waiprice
+											var	goodsimg =  res[0].goodsimg
+											var	inventory =  res[0].inventory
+											var	sales =  res[0].sales
+											document.getElementsByClassName("goods_name")[0].value=goodname
+											document.getElementsByClassName("goods_sn")[0].value=cargo
+											document.getElementsByClassName("brand_id")[0].value=brand
+											document.getElementsByClassName("shop_price")[0].value=myprice
+											document.getElementsByClassName("market_price")[0].value=waiprice
+											document.getElementsByClassName("virtual_sales")[0].value=inventory
+										}
+									});
+									var oButtondata =document.getElementsByClassName("button_date")[0]
+									oButtondata.onclick = function(){
+									var form = new FormData();
+									form.append("goodname",document.getElementsByClassName("goods_name")[0].value)
+									form.append("cargo",document.getElementsByClassName("goods_sn")[0].value)
+									form.append("brand",document.getElementsByClassName("brand_id")[0].value)
+									form.append("myprice",document.getElementsByClassName("shop_price")[0].value)
+									form.append("waiprice",document.getElementsByClassName("market_price")[0].value)
+									form.append("goodsimg",document.getElementsByClassName("goods_img")[0].files[0])
+									form.append("inventory","99")
+									form.append("sales",document.getElementsByClassName("virtual_sales")[0].value)
+									var xhr = new XMLHttpRequest;
+									xhr.open("POST","/updata-addgoods-add")
+									xhr.send(form)
+									xhr.onreadystatechange = function(){
+										if(xhr.readyState ==4 && xhr.status==200 ){
+											var res = JSON.parse(xhr.responseText)
+											alert(res.message)
+										}
+									}
+								}
+									
+								},1000)
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+							}
+						});
+					}
+					
 					
 					
 					
@@ -429,18 +492,8 @@
 					}
 					
 					
-					Update[q].onclick = function(){
-						alert(123)
-					}
 					
-					
-					
-					
-					
-					
-					
-					
-					
+
 				}
 			},500)
 							

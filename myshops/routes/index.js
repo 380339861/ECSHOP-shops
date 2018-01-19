@@ -142,8 +142,44 @@ router.post('/removegoods', function(req, res, next) {
 
 //更新商品
 router.get('/updatagoods-index', function(req, res, next) {
-res.render('updatagoods', {});
+res.render('updatagoods-index', {});
 });
+
+router.get('/updata-addgoods', function(req, res, next) {
+	GoodsModel.find({goodname:req.query.goodIdp}, function (err,docs) {
+
+			res.json(docs)
+		});
+});
+
+router.post('/updata-addgoods-add', function(req, res, next) {
+	var form = new multiparty.Form({
+    	uploadDir: "public/images"
+    })
+ 			var result = {
+			code: 1,
+			message: "商品信息更新成功"
+		};
+    form.parse(req, function(err, fields, files) {
+    	var goodname = fields.goodname[0]
+    	var cargo = fields.cargo[0]
+    	var brand = fields.brand[0]
+    	var myprice = fields.myprice[0]
+    	var waiprice = fields.waiprice[0]
+    	var goodsimg = (files.goodsimg[0].path).replace("public\\","")
+    	var inventory = fields.inventory[0]
+    	var sales = fields.sales[0]
+//  	console.log(goodname)
+    	GoodsModel.update({goodname:goodname},{$set:{cargo:cargo}},function(err){
+    		if(err){
+    			result.code = -1000;
+    			result.message = "商品信息更新失败"
+    		}
+    		res.json(result)
+    	})
+   	});
+});
+
 //router.get('/updatagoods-index', function(req, res, next) {
 //	GoodsModel.find({}, 
 //		function (err, docs) {
